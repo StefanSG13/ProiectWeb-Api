@@ -34,5 +34,13 @@ namespace BookStoreApi.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("get-range")]
+        public async Task<ActionResult> GetRange([FromQuery]List<int> ids)
+        {
+            var result = await _bookService.GetRange(ids);
+
+            return Ok(result);
+        }
     }
 }

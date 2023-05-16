@@ -10,6 +10,8 @@ namespace Service.Services
 {
     public class BookService : IBookService
     {
+        private const string image = "https://images.squarespace-cdn.com/content/5b80290bee1759a50e3a86b3/1655234687083-VUGUOH34O8P0069XAIF2/flatback-underwater-doug-perrine.jpg?format=1500w&content-type=image%2Fjpeg";
+
         public BookService()
         {
             
@@ -17,8 +19,6 @@ namespace Service.Services
 
         public async Task<BookDetailsDto> Get(int id)
         {
-            var image = "https://images.squarespace-cdn.com/content/5b80290bee1759a50e3a86b3/1655234687083-VUGUOH34O8P0069XAIF2/flatback-underwater-doug-perrine.jpg?format=1500w&content-type=image%2Fjpeg";
-
             return new BookDetailsDto() {
                 Id = id,
                 Title = "Doroftei",
@@ -34,13 +34,25 @@ namespace Service.Services
         {
             var idCt = 0;
             var rdm = new Random();
-            const string image = "https://images.squarespace-cdn.com/content/5b80290bee1759a50e3a86b3/1655234687083-VUGUOH34O8P0069XAIF2/flatback-underwater-doug-perrine.jpg?format=1500w&content-type=image%2Fjpeg";
+            
 
             var books = new List<BookDto>() {};
 
             for(int i = 0; i<40; i++)
             {
                 books.Add(new BookDto() { Id = idCt++, Title = $"Doroftei partea {idCt}", Price = rdm.Next() % 1723489, Image = image, Recommended = false });
+            }
+
+            return books;
+        }
+
+        public async Task<List<BookDto>> GetRange(List<int> ids)
+        {
+            var books = new List<BookDto>();
+
+            foreach (var id in ids)
+            {
+                books.Add(new BookDto() { Id = id, Price = 555, Title = $"Doroftei pt {id}", Image = image });
             }
 
             return books;

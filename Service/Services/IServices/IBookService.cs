@@ -11,5 +11,6 @@ namespace Service.Services.IServices
     {
         public Task<List<BookDto>> GetAll();
         public Task<BookDetailsDto> Get(int id);
+        public Task<List<BookDto>> GetRange(List<int> ids);
     }
 }
