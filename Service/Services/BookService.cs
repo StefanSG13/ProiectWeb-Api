@@ -1,5 +1,7 @@
-﻿using Service.Dtos;
+﻿using Microsoft.Data.SqlClient;
+using Service.Dtos;
 using Service.Services.IServices;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +13,11 @@ namespace Service.Services
     public class BookService : IBookService
     {
         private const string image = "https://images.squarespace-cdn.com/content/5b80290bee1759a50e3a86b3/1655234687083-VUGUOH34O8P0069XAIF2/flatback-underwater-doug-perrine.jpg?format=1500w&content-type=image%2Fjpeg";
+        private readonly SqlConnection _connection;
 
         public BookService()
         {
-            
+            _connection = new SqlConnection("Server=localhost;Database=master;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True");
         }
 
         public async Task<BookDetailsDto> Get(int id)
@@ -32,18 +35,14 @@ namespace Service.Services
 
         public async Task<List<BookDto>> GetAll()
         {
-            var idCt = 0;
-            var rdm = new Random();
-            
-
-            var books = new List<BookDto>() {};
-
-            for(int i = 0; i<40; i++)
+            using (var connection = new SqlConnection("Server=localhost;Database=master;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True"))
             {
-                books.Add(new BookDto() { Id = idCt++, Title = $"Doroftei partea {idCt}", Price = rdm.Next() % 1723489, Image = image, Recommended = false });
-            }
+                connection.Open();
+                var books = await connection.QueryAsync<BookDto>("select * from book");
+                connection.Close();
 
-            return books;
+                return books.ToList();
+            }
         }
 
         public async Task<List<BookDto>> GetRange(List<int> ids)
